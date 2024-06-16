@@ -4,9 +4,7 @@
     <div class="container mt-5">
         <h1>Create Product</h1>
         
-        @if (Gate::allows('isAdmin') || Gate::allows('isManager'))
-            <a href="{{ route('products.create') }}" class="btn btn-success btn-md float-right">Create Product</a>  
-        @endif
+        <a href="{{ route('products.create') }}" class="btn btn-success btn-md float-right">Create Product</a>
         
         @if(session()->has('success'))
             <label id="box" class="alert alert-success w-100">{{session('success')}}</label>
@@ -23,9 +21,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Price</th>
                         <th scope="col">Description</th>
-                        @if (Gate::allows('isAdmin') || Gate::allows('isManager'))
                         <th scope="col">Action</th>
-                        @endif
                         
                       </tr>
                     </thead>
@@ -36,8 +32,6 @@
                                 <td>{{$product->name}}</td>
                                 <td>{{$product->price}}</td>
                                 <td>{!! $product->description !!}</td>
-                                
-                                @if (Gate::allows('isAdmin') || Gate::allows('isManager'))
                                 <td>
                                     <form action="{{ route('products.destroy',$product->id) }}" method="POST">
    
@@ -45,18 +39,13 @@
                         
                                         <a class="btn btn-primary" href="{{ route('products.edit',$product->id) }}">Edit</a>
                                         
-                                        @can('isAdmin')
                                         @csrf
                                         @method('DELETE')
                           
                                         <button type="submit" class="btn btn-danger">Delete</button> 
                                         
-                                        @endcan
-                                        
-                                        
                                     </form>
                                 </td>
-                                @endif
                                 
                             </tr>
                         @endforeach

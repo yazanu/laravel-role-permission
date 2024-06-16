@@ -13,5 +13,6 @@
 <body>
     @include('layouts.nav')
     @yield('content')
+    @stack('scripts')
 </body>
 </html>

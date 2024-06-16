@@ -9,11 +9,14 @@ use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct(){
+        $this->middleware('permission:product-index|product-create|product-edit|product-show|product-delete', ['only' => ['index']]);
+        $this->middleware('permission:product-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:product-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:product-show', ['only' => ['show']]);
+        $this->middleware('permission:product-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         if (Auth::check()) {
@@ -31,11 +34,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        if(Gate::allows('isAdmin') || Gate::allows('isManager')){
-            return view('product.create');
-        }else{
-            abort(401,  'Unauthorized');
-        }
+        return view('product.create');
     }
 
     /**
@@ -46,23 +45,19 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        if (Gate::allows('isAdmin') || Gate::allows('isManager')) {
-            $request->validate([
-                'name' => 'required',
-                'price' => 'required',
-                'description' => 'required',
-            ]);
-            $product = Product::create([
-                'name' => $request->name,
-                'price' => $request->price,
-                'description' => $request->description,
-            ]);
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required',
+            'description' => 'required',
+        ]);
+        $product = Product::create([
+            'name' => $request->name,
+            'price' => $request->price,
+            'description' => $request->description,
+        ]);
 
-            return redirect()->route('products.index')
-                        ->with('success','Product created successfully.');
-        } else {
-            abort(401, 'Unauthorized');
-        }
+        return redirect()->route('products.index')
+                    ->with('success','Product created successfully.');
         
     }
 
