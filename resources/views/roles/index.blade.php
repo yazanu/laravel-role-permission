@@ -5,16 +5,17 @@
         <div class="row">
             <div class="col-md-12">
                 <nav>
-                    <div class="nav nav-tabs role-permission-tab" id="nav-tab" role="tablist">
-                        @foreach(config('role.user_roles') as $key=>$r)
-                            <a href="#nav-{{$key}}" class="nav-link @if($key == auth()->user()->role_id) active @endif" id="nav-{{$key}}-tab" data-toggle="tab" role="tab" aria-controls="nav-{{$key}}" aria-selected="true">{{$r}}</a>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        @foreach (config('role.user_roles') as $k=>$r)
+                            <a class="nav-link @if($k==auth()->user()->role_id) active @endif" id="nav-{{$k}}-tab" data-bs-toggle="tab" href="#nav-{{$k}}" role="tab" aria-controls="nav-{{$k}}" @if($k == auth()->user()->role_id) aria-selected="true" @else aria-selected="false" @endif>{{$r}}</a>
                         @endforeach
                     </div>
                 </nav>
 
                 <div class="tab-content" id="nav-tabContent">
                     @foreach (config('role.user_roles') as $key=>$role)
-                    <div class="tab-pane fade show active" id="nav-{{$key}}" role="tabpanel" aria-labelledby="nav-{{$key}}-tab">
+                    <div class="tab-pane fade @if($key==auth()->user()->role_id) show active @endif" id="nav-{{$key}}" role="tabpanel" aria-labelledby="nav-{{$key}}-tab">
+
                         <form action="/permissions" method="post">
                         @csrf
                         <input type="hidden" name="role_id" value="{{$key}}">
