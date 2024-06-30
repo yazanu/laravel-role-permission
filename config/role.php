@@ -12,5 +12,10 @@ return [
         2 => 'Manager',
         3 => 'User'
     ],
+
+    'active' => [
+        'Active' => 1,
+        'Inactive' => 0,
+    ]
 ];
 ?>
